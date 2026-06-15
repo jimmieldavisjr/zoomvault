@@ -66,19 +66,22 @@ export default function Home() {
   return (
     <main className="flex flex-1 flex-col">
       <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2 font-heading text-lg font-semibold">
-            <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-2 px-4 sm:px-6">
+          <Link
+            href="/"
+            className="flex min-w-0 items-center gap-2 font-heading text-lg font-semibold"
+          >
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <Lock className="size-4" />
             </span>
-            ZoomVault
+            <span className="truncate">ZoomVault</span>
           </Link>
-          <nav className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
+          <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
               <Link href="#features">Features</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link href="/recordings">
+              <Link href="#">
                 Open portal
                 <ArrowRight />
               </Link>
@@ -87,21 +90,21 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="mx-auto w-full max-w-6xl px-6 py-20 sm:py-28">
+      <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <div className="flex flex-col items-center text-center">
           <Badge variant="secondary" className="mb-6 gap-1.5">
             <ShieldCheck />
             Secure recording sharing
           </Badge>
-          <h1 className="max-w-3xl font-heading text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
+          <h1 className="max-w-3xl font-heading text-3xl font-semibold tracking-tight text-balance sm:text-6xl">
             Share Zoom cloud recordings through secure, temporary links
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted-foreground text-pretty">
+          <p className="mt-6 max-w-2xl text-base text-muted-foreground text-pretty sm:text-lg">
             ZoomVault is a lightweight web portal that uses Zoom for video storage and playback
             while adding recording metadata, attendee access tracking, expiring share links, and
             automated email notifications.
           </p>
-          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
+          <div className="mt-8 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
             <Button size="lg" asChild>
               <Link href="/recordings">
                 Get started
@@ -115,8 +118,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="features" className="mx-auto w-full max-w-6xl px-6 pb-20">
-        <div className="mb-10 max-w-2xl">
+      <section id="features" className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 sm:pb-24">
+        <div className="mb-8 max-w-2xl sm:mb-10">
           <h2 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
             Everything you need to share recordings safely
           </h2>
@@ -140,7 +143,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl px-6 pb-24">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 sm:pb-24">
         <Card className="bg-muted/40">
           <CardContent className="flex flex-col items-start gap-6 py-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -161,7 +164,7 @@ export default function Home() {
       </section>
 
       <footer className="mt-auto border-t">
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 text-sm text-muted-foreground sm:flex-row">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-center text-sm text-muted-foreground sm:flex-row sm:px-6 sm:text-left">
           <div className="flex items-center gap-2">
             <Clock className="size-4" />
             ZoomVault — temporary links, lasting control
