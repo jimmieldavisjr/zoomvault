@@ -1,20 +1,29 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import {
   ZoomUrlValidationResponse,
   ZoomWebhookEvent,
 } from './dto/zoom-webhook-event.dto';
+import { RecordingsService } from '../recordings/recordings.service';
+import type { ZoomRecordingCompletedEvent } from '../recordings/dto/recording-completed.dto';
+import type { AppConfig } from '../../config/configuration';
 
 @Injectable()
 export class ZoomService {
   private readonly logger = new Logger(ZoomService.name);
+
+  constructor(
+    private readonly config: ConfigService<AppConfig, true>,
+    private readonly recordings: RecordingsService,
+  ) {}
 
   /**
    * Secret Token from the Zoom app's "Feature" -> "Event Subscriptions" page.
    * Set `ZOOM_WEBHOOK_SECRET_TOKEN` in the environment before going live.
    */
   private get secretToken(): string {
-    const token = process.env.ZOOM_WEBHOOK_SECRET_TOKEN;
+    const token = this.config.get('zoomWebhookSecretToken', { infer: true });
     if (!token) {
       this.logger.warn(
         'ZOOM_WEBHOOK_SECRET_TOKEN is not set; signature verification and CRC will fail.',
@@ -72,14 +81,17 @@ export class ZoomService {
   /**
    * Routes a verified Zoom event to the appropriate handler.
    *
-   * This is intentionally a stub: add real handling per event type as the
-   * integration grows.
+   * Throwing here causes the controller to return a 5xx, which makes Zoom retry
+   * the delivery. That's safe because downstream processing is idempotent, so a
+   * transient DB/email blip self-heals on the retry.
    */
-  routeEvent(event: ZoomWebhookEvent): void {
+  async routeEvent(event: ZoomWebhookEvent): Promise<void> {
     switch (event.event) {
-      // TODO: handle cloud recording completion (download, store, index).
       case 'recording.completed':
         this.logger.log(`Received recording.completed at ${event.event_ts}`);
+        await this.recordings.processRecordingCompleted(
+          event as unknown as ZoomRecordingCompletedEvent,
+        );
         break;
 
       // TODO: handle meeting lifecycle events.

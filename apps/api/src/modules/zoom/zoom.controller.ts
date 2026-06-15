@@ -34,7 +34,7 @@ export class ZoomController {
 
   @Post('webhook')
   @HttpCode(HttpStatus.OK)
-  handleWebhook(
+  async handleWebhook(
     @Req() req: RawBodyRequest<Request>,
     @Body() body: ZoomWebhookEvent,
     @Headers('x-zm-signature') signature?: string,
@@ -56,16 +56,9 @@ export class ZoomController {
       throw new UnauthorizedException('Invalid Zoom webhook signature.');
     }
 
-    // ---------------------------------------------------------------------
-    // Boilerplate for future updates: branch on body.event here, or delegate
-    // to the service router below. Add DTOs per event type as needed.
-    //
-    // Examples of events to wire up next:
-    //   - recording.completed
-    //   - meeting.started / meeting.ended
-    //   - participant.joined / participant.left
-    // ---------------------------------------------------------------------
-    this.zoomService.routeEvent(body);
+    // Delegate verified events to the service router. `recording.completed`
+    // is persisted (idempotently) and triggers share-link + email side effects.
+    await this.zoomService.routeEvent(body);
 
     return { received: true };
   }
