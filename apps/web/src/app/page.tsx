@@ -106,7 +106,7 @@ export default function Home() {
           </p>
           <div className="mt-8 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
             <Button size="lg" asChild>
-              <Link href="/recordings">
+              <Link href="#">
                 Get started
                 <ArrowRight />
               </Link>
@@ -169,7 +169,7 @@ export default function Home() {
             <Clock className="size-4" />
             ZoomVault — temporary links, lasting control
           </div>
-          <p>© {new Date().getFullYear()} ZoomVault</p>
+          <p>© {new Date().getFullYear()} - {(new Date().getFullYear()) + 1}</p>
         </div>
       </footer>
     </main>
