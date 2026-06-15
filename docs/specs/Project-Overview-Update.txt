@@ -1,0 +1,520 @@
+# ZoomVault
+
+## Project Summary
+
+ZoomVault is a lightweight web portal for sharing Zoom cloud recordings through temporary expiring links.
+
+The project uses Zoom as the primary video storage and playback provider while adding a custom software layer for recording metadata, temporary access links, automated email notifications, and a clean attendee viewing page.
+
+The goal is to keep operating costs minimal by avoiding custom video storage and using the paid Zoom account’s existing cloud recording infrastructure.
+
+---
+
+## Purpose
+
+ZoomVault solves a simple workflow problem:
+
+> When a Zoom recording is complete, automatically create a temporary viewing link and notify an admin with the link through email, so the recording can be shared with attendees.
+
+The viewer does not need an account. Access is granted through a temporary URL that expires after 7–14 days, and the attendee only enters their name before viewing so the admin has a basic record of who accessed the recording.
+
+---
+
+## MVP Principle
+
+The custom software should **not replace Zoom video hosting**.
+
+The software should provide a lightweight access layer around Zoom recordings.
+
+Zoom handles:
+
+- Video recording
+    
+- Video processing
+    
+- Cloud storage
+    
+- Playback availability
+    
+
+ZoomVault handles:
+
+- Temporary access links
+    
+- Recording metadata
+    
+- Attendee viewing page
+    
+- Transcript/resource display
+    
+- Email notification
+    
+- Basic admin workflow
+    
+
+---
+
+## High-Level Architecture
+
+```text
+Zoom Cloud Recording
+        ↓
+Zoom Webhook
+        ↓
+NestJS Backend on Railway
+        ↓
+PostgreSQL Database
+        ↓
+Resend Email Notification
+        ↓
+Next.js Frontend on Vercel
+        ↓
+Attendee views recording through temporary link
+```
+
+---
+
+## Primary User Flow
+
+1. A Zoom meeting is recorded.
+    
+2. Zoom finishes processing the cloud recording.
+    
+3. Zoom sends a webhook to the NestJS backend.
+    
+4. The backend stores recording metadata in PostgreSQL.
+    
+5. The backend creates a temporary viewing link.
+    
+6. Resend emails the admin that the recording is ready.
+    
+7. The admin shares the link with attendees.
+    
+8. The attendee opens the link and views the recording page after name input.
+    
+9. The link expires after 7–14 days.
+    
+
+---
+
+## Example URL Structure
+
+Frontend:
+
+```text
+https://zoomvault.jdtechnologypartners.com
+```
+
+Viewer link:
+
+```text
+https://zoomvault.jdtechnologypartners.com/watch/abc123
+```
+
+Admin page:
+
+```text
+https://zoomvault.jdtechnologypartners.com/admin
+```
+
+Backend API:
+
+```text
+https://api.zoomvault.jdtechnologypartners.com
+```
+
+---
+
+## Technology Stack
+
+| Layer              | Technology   | Purpose                                     |
+| ------------------ | ------------ | ------------------------------------------- |
+| Domain/DNS         | Namecheap    | Domain registrar and DNS management         |
+| Frontend Hosting   | Vercel       | Hosts the Next.js web application           |
+| Frontend Framework | Next.js      | Builds the attendee/admin web portal        |
+| Language           | TypeScript   | Shared language across frontend and backend |
+| Styling            | Tailwind CSS | Utility-first styling system                |
+| UI Components      | ShadCN UI    | Clean reusable UI components                |
+| Backend Hosting    | Railway      | Hosts the NestJS backend API                |
+| Backend Framework  | NestJS       | Handles application logic and integrations  |
+| Database           | PostgreSQL   | Stores metadata, share links, and logs      |
+| Video Provider     | Zoom         | Stores and serves cloud recordings          |
+| Email Provider     | Resend       | Sends recording-ready email notifications   |
+| ORM                | Prisma       | Connect NestJS to PostgreSQL with TS setup  |
+
+---
+
+## Namecheap
+
+Namecheap is used as the domain registrar and DNS manager.
+
+The domain remains managed in Namecheap, while DNS records point the application subdomains to Vercel and Railway.
+
+Planned subdomains:
+
+```text
+zoomvault.jdtechnologypartners.com
+api.zoomvault.jdtechnologypartners.com
+```
+
+---
+
+## Vercel + Next.js
+
+Vercel hosts the Next.js frontend application.
+
+The frontend is responsible for the user-facing portal experience:
+
+- Temporary watch page
+    
+- Expired link page
+    
+- ==Recording details page==
+    
+- Transcript/resource display
+    
+- Basic admin page if needed
+    
+- Error and access-denied pages
+    
+
+The frontend should remain simple, minimal, and focused on helping attendees access the recording without confusion.
+
+---
+
+## Tailwind CSS + ShadCN UI
+
+Tailwind CSS and ShadCN UI provide the design system for the portal.
+
+The UI should use simple components such as:
+
+- Cards
+    
+- Buttons
+    
+- Badges
+    
+- Alerts
+    
+- Tabs
+    
+- Forms
+    
+- Inputs
+    
+
+The design goal is:
+
+- Minimal
+    
+- Clean
+    
+- Responsive
+    
+- Professional
+    
+- Easy for non-technical users
+    
+
+No complex dashboards, analytics panels, or heavy side navigation are needed for the MVP.
+
+---
+
+## Railway + NestJS
+
+Railway hosts the NestJS backend API.
+
+NestJS handles the core business logic:
+
+- Receiving Zoom webhooks
+    
+- Validating webhook requests
+    
+- Creating recording records
+    
+- Generating temporary share links
+    
+- Checking link expiration
+    
+- Sending emails through Resend
+    
+- Reading/writing PostgreSQL data
+    
+- Providing API endpoints to the frontend
+    
+
+NestJS is preferred over Express because the project has several clear modules and may grow over time.
+
+Possible modules:
+
+- Zoom module
+    
+- Recordings module
+    
+- Share Links module
+    
+- Email module
+    
+- Admin module
+    
+- Health Check module
+    
+
+---
+
+## PostgreSQL
+
+PostgreSQL stores application data.
+
+The video files are **not** stored in PostgreSQL.
+
+PostgreSQL stores metadata such as:
+
+- Recording title
+    
+- Zoom meeting ID
+    
+- Zoom recording ID
+    
+- Recording date
+    
+- Duration
+    
+- Zoom playback reference
+    
+- Share token
+    
+- Expiration date
+    
+- Email notification status
+    
+- Basic access logs
+    
+
+---
+
+## Zoom
+
+Zoom remains the video storage and playback provider.
+
+After a meeting ends, Zoom processes the cloud recording and sends a webhook event to the backend when the recording is ready.
+
+Zoom is responsible for:
+
+- Recording the meeting
+    
+- Processing the video
+    
+- Hosting the video
+    
+- Providing the playback reference
+    
+- Reducing the need for separate video storage costs
+    
+
+---
+
+## Resend
+
+Resend sends automated transactional emails.
+
+Primary email use case:
+
+```text
+Zoom recording completed
+        ↓
+NestJS generates 14-day link
+        ↓
+Resend sends email to admin
+        ↓
+Admin shares link with attendees
+```
+
+Example email subject:
+
+```text
+Your Zoom recording is ready
+```
+
+Example email content:
+
+```text
+The recording for [Meeting Title] is ready.
+
+Temporary access link:
+https://zoomvault.jdtechnologypartners.com/watch/abc123
+
+This link expires in 14 days.
+```
+
+---
+
+## Temporary Link Rules
+
+Temporary links are the primary access mechanism.
+
+Rules:
+
+- Each link uses a unique random token.
+    
+- Links expire after 7–14 days.
+    
+- Viewers do not need an account.
+    
+- Expired links show a clear expiration message.
+    
+- The raw Zoom recording link should not be exposed as the main shared URL.
+    
+- The portal URL should be the link shared with attendees.
+    
+
+Example:
+
+```text
+https://zoomvault.jdtechnologypartners.com/watch/abc123
+```
+
+---
+
+## Cost Strategy
+
+The main cost-saving decision is to avoid storing video files in the custom application.
+
+Expected MVP cost profile:
+
+|Item|Cost Strategy|
+|---|---|
+|Domain|Already owned through Namecheap|
+|Frontend|Vercel free tier to start|
+|Backend|Railway low-cost hosting|
+|Database|Railway PostgreSQL or low-cost PostgreSQL|
+|Email|Resend free tier at low volume|
+|Video Storage|Included in paid Zoom plan|
+|Extra Video Storage|None for MVP|
+
+The system should only add costs where custom functionality is required.
+
+---
+
+## MVP Scope
+
+The MVP should include:
+
+- Zoom webhook receiver
+    
+- Recording metadata storage
+    
+- Temporary share link generation
+    
+- Expiring watch page
+    
+- Basic recording metadata display
+    
+- Resend email notification to admin
+    
+- Simple admin workflow
+    
+- Namecheap/Vercel/Railway domain setup
+    
+
+---
+
+## Out of Scope for MVP
+
+Do not build these in the first version:
+
+- Custom video hosting
+    
+- User accounts for attendees
+    
+- Complex analytics dashboard
+    
+- Multi-tenant billing
+    
+- Advanced DRM
+    
+- Full learning management system
+    
+- Heavy admin permissions
+    
+- Native mobile app
+    
+
+---
+
+## Key Decisions
+
+|Decision|Status|
+|---|---|
+|Project name: ZoomVault|Decided|
+|Frontend: Next.js|Decided|
+|Frontend hosting: Vercel|Decided|
+|Backend: NestJS|Decided|
+|Backend hosting: Railway|Decided|
+|Database: PostgreSQL|Decided|
+|Email provider: Resend|Decided|
+|Video storage: Zoom cloud recordings|Decided|
+|Access model: temporary links, no viewer login|Decided|
+|Domain: `zoomvault.jdtechnologypartners.com`|Decided|
+
+---
+
+## Open Questions
+
+- Should the admin page require login in the MVP? > ==access code==
+    
+- Should links expire after 7 days or 14 days by default? > ==default: 14==
+    
+- Should each recording generate one shared link or multiple unique links? > ==1 Link==
+    
+- Should transcripts come directly from Zoom or be generated separately later? > ==Zoom==
+    
+- Should expired links allow users to request renewed access? > ===No===
+    
+- Should download access be disabled in Zoom recording settings? > ==Yes==
+    
+
+---
+
+## Next Actions
+
+- Create project repository
+    
+- Create Next.js frontend app
+    
+- Create NestJS backend app
+    
+- Configure Railway project
+    
+- Configure PostgreSQL database
+    
+- Configure Vercel project
+    
+- Configure Namecheap DNS records
+    
+- Configure Zoom developer app
+    
+- Configure Zoom webhook endpoint
+    
+- Configure Resend domain and API key
+    
+- Build first end-to-end recording flow
+    
+
+---
+
+## Related Notes
+
+- [[ZoomVault Roadmap]]
+    
+- [[ZoomVault Architecture]]
+    
+- [[ZoomVault Database Design]]
+    
+- [[ZoomVault API Endpoints]]
+    
+- [[ZoomVault Deployment]]
+    
+- [[ZoomVault Decisions]]
+    
+- [[ZoomVault Environment Variables]]
