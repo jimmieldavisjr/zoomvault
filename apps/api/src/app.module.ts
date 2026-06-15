@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -14,7 +15,12 @@ import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // Load apps/api/.env locally; Railway injects the same keys via process.env.
+      envFilePath: join(__dirname, '..', '.env'),
+      load: [configuration],
+    }),
     PrismaModule,
     ZoomModule,
     RecordingsModule,

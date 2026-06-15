@@ -33,7 +33,7 @@ export default (): AppConfig => ({
   adminNotificationEmail: process.env.ADMIN_NOTIFICATION_EMAIL ?? '',
   appPublicUrl: process.env.APP_PUBLIC_URL ?? 'http://localhost:3000',
   apiPublicUrl: process.env.API_PUBLIC_URL ?? 'http://localhost:4000',
-  adminAccessCode: process.env.ADMIN_ACCESS_CODE ?? '',
+  adminAccessCode: (process.env.ADMIN_ACCESS_CODE ?? '').trim(),
   defaultLinkExpirationDays: parseInt(
     process.env.DEFAULT_LINK_EXPIRATION_DAYS ?? '14',
     10,
