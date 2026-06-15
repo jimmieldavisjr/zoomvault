@@ -81,7 +81,7 @@ export default function Home() {
               <Link href="#features">Features</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link href="#">
+              <Link href="/admin">
                 Open portal
                 <ArrowRight />
               </Link>
@@ -106,8 +106,8 @@ export default function Home() {
           </p>
           <div className="mt-8 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
             <Button size="lg" asChild>
-              <Link href="#">
-                Get started
+              <Link href="/admin">
+                Open admin portal
                 <ArrowRight />
               </Link>
             </Button>

@@ -1,0 +1,113 @@
+// ZoomVault database schema.
+//
+// Video files themselves live in Zoom cloud storage. This database only stores
+// recording metadata, the secure temporary share links, and viewer access logs.
+//
+// === OUTSIDE-CURSOR OPERATIONS ===
+// After editing this file you must run the Prisma workflow from a terminal that
+// has DATABASE_URL pointing at a real PostgreSQL instance:
+//   npx prisma generate          # regenerate the typed client (safe, no DB)
+//   npx prisma migrate dev       # create + apply a migration locally
+//   npx prisma migrate deploy    # apply committed migrations in prod (Railway)
+// Railway provisions PostgreSQL and injects DATABASE_URL; never commit real
+// connection strings.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Zoom recording metadata received from the `recording.completed` webhook.
+model Recording {
+  id              String   @id @default(uuid())
+  zoomMeetingId   String   @map("zoom_meeting_id")
+  /// Unique per Zoom meeting session — used as the idempotency key so retried
+  /// webhook deliveries do not create duplicate rows.
+  zoomMeetingUuid String   @unique @map("zoom_meeting_uuid")
+  zoomAccountId   String?  @map("zoom_account_id")
+  hostId          String?  @map("host_id")
+  topic           String?
+  startTime       DateTime? @map("start_time")
+  endTime         DateTime? @map("end_time")
+  durationMinutes Int?     @map("duration_minutes")
+  recordingCount  Int?     @map("recording_count")
+  /// Full original webhook payload, kept for debugging/replay. Never expose to
+  /// the public viewer — it can contain download URLs and Zoom tokens.
+  rawPayloadJson  Json?    @map("raw_payload_json")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  files       RecordingFile[]
+  shareLinks  ShareLink[]
+  accessLogs  AccessLog[]
+
+  @@index([zoomMeetingId])
+  @@map("recordings")
+}
+
+/// Individual file produced for a recording (video, audio, transcript, chat...).
+model RecordingFile {
+  id             String   @id @default(uuid())
+  recordingId    String   @map("recording_id")
+  /// Zoom's per-file id — unique so retried webhooks are idempotent per file.
+  zoomFileId     String   @unique @map("zoom_file_id")
+  fileType       String?  @map("file_type")
+  fileExtension  String?  @map("file_extension")
+  fileSize       BigInt?  @map("file_size")
+  recordingType  String?  @map("recording_type")
+  /// Zoom-hosted playback URL (passcode-protected). Used by the viewer page.
+  playUrl        String?  @map("play_url")
+  /// Direct download URL. Kept backend-only; do NOT return to public viewers.
+  downloadUrl    String?  @map("download_url")
+  status         String?
+  recordingStart DateTime? @map("recording_start")
+  recordingEnd   DateTime? @map("recording_end")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  recording Recording @relation(fields: [recordingId], references: [id], onDelete: Cascade)
+
+  @@index([recordingId])
+  @@map("recording_files")
+}
+
+/// Secure temporary link granting public access to a recording.
+model ShareLink {
+  id          String   @id @default(uuid())
+  recordingId String   @map("recording_id")
+  /// SHA-256 hash of the raw token. The raw token is shown exactly once at
+  /// creation and never persisted.
+  tokenHash   String   @unique @map("token_hash")
+  expiresAt   DateTime @map("expires_at")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  recording  Recording   @relation(fields: [recordingId], references: [id], onDelete: Cascade)
+  accessLogs AccessLog[]
+
+  @@index([recordingId])
+  @@map("share_links")
+}
+
+/// Record of a viewer opening a recording through a share link.
+model AccessLog {
+  id          String   @id @default(uuid())
+  shareLinkId String   @map("share_link_id")
+  recordingId String   @map("recording_id")
+  attendeeName String? @map("attendee_name")
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  accessedAt  DateTime @default(now()) @map("accessed_at")
+
+  shareLink ShareLink @relation(fields: [shareLinkId], references: [id], onDelete: Cascade)
+  recording Recording @relation(fields: [recordingId], references: [id], onDelete: Cascade)
+
+  @@index([shareLinkId])
+  @@index([recordingId])
+  @@map("access_logs")
+}
