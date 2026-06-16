@@ -144,7 +144,7 @@ export class ShareLinksService {
       expiresAt: link.expiresAt,
       // Only expose playable files and never the download URL.
       files: recording.files
-        .filter((file) => file.playUrl)
+        .filter((file): file is typeof file & { playUrl: string } => Boolean(file.playUrl))
         .map((file) => ({
           id: file.id,
           recordingType: file.recordingType,

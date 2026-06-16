@@ -167,39 +167,33 @@ export function WatchClient({
           <Card className="overflow-hidden">
             <div className="aspect-video w-full bg-muted">
               {primaryFile?.playUrl ? (
-                <iframe
-                  src={primaryFile.playUrl}
-                  title={title}
-                  className="h-full w-full border-0"
-                  allow="fullscreen"
-                  allowFullScreen
-                />
+                <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
+                  <span className="flex size-16 items-center justify-center rounded-full bg-background shadow-sm">
+                    <Play className="size-8" />
+                  </span>
+                  <div>
+                    <p className="font-semibold">This recording is hosted on Zoom</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Click below to watch it in a new tab.
+                    </p>
+                  </div>
+                  <Button asChild size="lg">
+                    <a
+                      href={primaryFile.playUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Watch Recording
+                      <ExternalLink />
+                    </a>
+                  </Button>
+                </div>
               ) : (
                 <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
                   No playable recording file is available.
                 </div>
               )}
             </div>
-            {primaryFile?.playUrl && (
-              <CardContent>
-                <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-                  <p className="text-sm text-muted-foreground">
-                    If the recording doesn&apos;t load above, open it directly
-                    on Zoom.
-                  </p>
-                  <Button variant="outline" asChild>
-                    <a
-                      href={primaryFile.playUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Open on Zoom
-                      <ExternalLink />
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            )}
           </Card>
 
           <Card>
