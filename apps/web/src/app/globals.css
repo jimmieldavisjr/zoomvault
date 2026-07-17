@@ -274,11 +274,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-intro,
-  .home-intro__glow,
-  .home-intro__rings span,
-  .home-intro__brand {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
+  .home-intro {
+    display: none;
   }
 }
