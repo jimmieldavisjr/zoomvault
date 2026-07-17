@@ -53,7 +53,7 @@ export function AdminLogin({
     <div className="flex min-h-full flex-1 items-center justify-center p-4 sm:p-6">
       <Card className="w-full max-w-sm">
         <CardHeader className="items-center text-center">
-          <span className="mx-auto mb-2 flex size-11 items-center justify-center rounded-full bg-primary text-primary-foreground">
+          <span className="logo-gradient mx-auto mb-2 flex size-11 items-center justify-center rounded-full text-white">
             <Lock className="size-5" />
           </span>
           <CardTitle className="text-xl">ZoomVault Admin</CardTitle>

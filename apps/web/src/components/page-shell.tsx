@@ -24,10 +24,10 @@ export function PageShell({
             href="/"
             className="flex min-w-0 items-center gap-2 font-heading text-lg font-semibold"
           >
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <span className="logo-gradient flex size-8 shrink-0 items-center justify-center rounded-md text-white">
               <Lock className="size-4" />
             </span>
-            <span className="truncate">ZoomVault</span>
+            <span className="logo-gradient-text truncate">ZoomVault</span>
           </Link>
         </div>
       </header>
