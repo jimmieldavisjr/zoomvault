@@ -128,3 +128,45 @@
     @apply font-sans;
   }
 }
+
+/* ── Page entrance animations ─────────────────────────────────────────────── */
+
+@keyframes zv-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zv-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply to any element that should entrance-animate.
+   --enter-delay controls the individual stagger offset. */
+.animate-enter {
+  animation: zv-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) var(--enter-delay, 0ms) both;
+}
+
+.animate-header-enter {
+  animation: zv-slide-down 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-enter,
+  .animate-header-enter {
+    animation-duration: 0.01ms;
+    animation-delay: 0ms;
+  }
+}
