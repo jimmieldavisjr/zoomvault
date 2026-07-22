@@ -145,14 +145,28 @@
 /* ── Home intro splash animation ──────────────────────────────────────────── */
 
 @keyframes zv-intro-fade {
-  0%   { opacity: 1; }
-  70%  { opacity: 1; }
+  0%,
+  78% { opacity: 1; }
   100% { opacity: 0; pointer-events: none; }
 }
 
 @keyframes zv-ring-pulse {
-  0%   { transform: scale(0.6); opacity: 0.6; }
-  100% { transform: scale(2.2); opacity: 0; }
+  0% { transform: scale(0.55); opacity: 0; }
+  18% { opacity: 0.7; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+@keyframes zv-intro-glow {
+  0% { transform: scale(0.75); opacity: 0.35; }
+  55% { transform: scale(1.15); opacity: 0.9; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes zv-brand-reveal {
+  0% { transform: scale(0.8) translateY(0.75rem); opacity: 0; }
+  30% { transform: scale(1) translateY(0); opacity: 1; }
+  82% { transform: scale(1) translateY(0); opacity: 1; }
+  100% { transform: scale(1.08) translateY(-0.5rem); opacity: 0; }
 }
 
 .home-intro {
@@ -162,15 +176,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--background);
-  animation: zv-intro-fade 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, oklch(0.55 0.22 280 / 35%), transparent 35%),
+    radial-gradient(circle at 80% 80%, oklch(0.45 0.2 264 / 35%), transparent 40%),
+    linear-gradient(135deg, oklch(0.2 0.08 264), oklch(0.28 0.12 280));
+  animation: zv-intro-fade 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .home-intro__glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.55 0.22 280 / 12%) 0%, transparent 70%);
+  background: radial-gradient(ellipse 50% 45% at 50% 50%, oklch(0.7 0.2 280 / 60%) 0%, transparent 70%);
   pointer-events: none;
+  animation: zv-intro-glow 2.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .home-intro__rings {
@@ -187,12 +206,13 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 1px solid oklch(0.55 0.22 280 / 25%);
-  animation: zv-ring-pulse 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  border: 1px solid oklch(0.85 0.08 280 / 65%);
+  box-shadow: 0 0 2rem oklch(0.55 0.22 280 / 30%);
+  animation: zv-ring-pulse 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.home-intro__rings span:nth-child(2) { animation-delay: 0.15s; }
-.home-intro__rings span:nth-child(3) { animation-delay: 0.3s; }
+.home-intro__rings span:nth-child(2) { animation-delay: 0.25s; }
+.home-intro__rings span:nth-child(3) { animation-delay: 0.5s; }
 
 .home-intro__brand {
   position: relative;
@@ -201,6 +221,7 @@
   align-items: center;
   gap: 0.75rem;
   text-align: center;
+  animation: zv-brand-reveal 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .home-intro__mark {
@@ -227,7 +248,7 @@
 
 .home-intro__brand span {
   font-size: 0.8125rem;
-  color: var(--muted-foreground);
+  color: oklch(0.95 0.02 280 / 85%);
 }
 
 /* ── Page entrance animations ─────────────────────────────────────────────── */
@@ -265,6 +286,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .home-intro,
+  .home-intro__glow,
+  .home-intro__rings span,
+  .home-intro__brand,
   .animate-enter,
   .animate-header-enter {
     animation-duration: 0.01ms;
