@@ -129,6 +129,107 @@
   }
 }
 
+/* ── Logo ─────────────────────────────────────────────────────────────────── */
+
+.menu-logo-gradient {
+  background: linear-gradient(135deg, oklch(0.45 0.2 264) 0%, oklch(0.55 0.22 280) 100%);
+}
+
+.menu-logo-gradient-text {
+  background: linear-gradient(135deg, oklch(0.45 0.2 264) 0%, oklch(0.55 0.22 280) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Home intro splash animation ──────────────────────────────────────────── */
+
+@keyframes zv-intro-fade {
+  0%   { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+
+@keyframes zv-ring-pulse {
+  0%   { transform: scale(0.6); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.home-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  animation: zv-intro-fade 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.home-intro__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.55 0.22 280 / 12%) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.home-intro__rings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.home-intro__rings span {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1px solid oklch(0.55 0.22 280 / 25%);
+  animation: zv-ring-pulse 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.home-intro__rings span:nth-child(2) { animation-delay: 0.15s; }
+.home-intro__rings span:nth-child(3) { animation-delay: 0.3s; }
+
+.home-intro__brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.home-intro__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, oklch(0.45 0.2 264) 0%, oklch(0.55 0.22 280) 100%);
+  color: white;
+}
+
+.home-intro__brand p {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, oklch(0.45 0.2 264) 0%, oklch(0.55 0.22 280) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.home-intro__brand span {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
 /* ── Page entrance animations ─────────────────────────────────────────────── */
 
 @keyframes zv-fade-up {

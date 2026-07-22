@@ -1,6 +1,10 @@
 {
+  "scripts": {
+    "dev": "concurrently --names \"api,web\" --prefix-colors \"cyan,magenta\" \"npm run start:dev --prefix apps/api\" \"npm run dev --prefix apps/web\""
+  },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "concurrently": "^10.0.3",
     "jest": "^30.4.2",
     "ts-jest": "^29.4.11"
   }
