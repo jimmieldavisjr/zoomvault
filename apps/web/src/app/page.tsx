@@ -20,7 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { HomeIntro } from "@/components/home-intro";
 
 const features = [
   {
@@ -66,7 +65,6 @@ const stack = ["Next.js", "NestJS", "PostgreSQL", "TypeScript"];
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col">
-      <HomeIntro />
       <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-2 px-4 sm:px-6">
           <Link
