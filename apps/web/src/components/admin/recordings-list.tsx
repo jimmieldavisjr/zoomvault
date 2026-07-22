@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -8,6 +8,7 @@ import {
   Clock,
   Eye,
   Link2,
+  RefreshCw,
   Video,
 } from "lucide-react";
 
@@ -47,35 +48,53 @@ export function RecordingsList() {
     null,
   );
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    let active = true;
-    listRecordings(code)
-      .then((data) => {
-        if (active) setRecordings(data);
-      })
-      .catch((err: unknown) => {
-        if (!active) return;
+  const load = useCallback(
+    async (showSpinner = false) => {
+      if (showSpinner) setRefreshing(true);
+      try {
+        const data = await listRecordings(code);
+        setRecordings(data);
+        setError(null);
+      } catch (err: unknown) {
         if (err instanceof AdminApiError && err.status === 401) {
           signOut();
           return;
         }
         setError("Couldn't load recordings. Please try again.");
-      });
-    return () => {
-      active = false;
-    };
-  }, [code, signOut]);
+      } finally {
+        if (showSpinner) setRefreshing(false);
+      }
+    },
+    [code, signOut],
+  );
+
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">
-          Recordings
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Recordings captured from Zoom webhook events, newest first.
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h1 className="font-heading text-2xl font-semibold tracking-tight">
+            Recordings
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Recordings captured from Zoom webhook events, newest first.
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => void load(true)}
+          disabled={refreshing}
+          className="shrink-0"
+        >
+          <RefreshCw className={refreshing ? "animate-spin" : ""} />
+          Refresh
+        </Button>
       </div>
 
       {error && (

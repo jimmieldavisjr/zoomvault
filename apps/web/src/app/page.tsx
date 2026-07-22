@@ -94,19 +94,36 @@ export default function Home() {
 
       <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <div className="flex flex-col items-center text-center">
-          <Badge variant="secondary" className="mb-6 gap-1.5">
-            <ShieldCheck />
-            Secure recording sharing
-          </Badge>
-          <h1 className="max-w-3xl font-heading text-3xl font-semibold tracking-tight text-balance sm:text-6xl">
+          <div
+            className="animate-enter mb-6"
+            style={{ "--enter-delay": "80ms" } as React.CSSProperties}
+          >
+            <Badge variant="secondary" className="gap-1.5">
+              <ShieldCheck />
+              Secure recording sharing
+            </Badge>
+          </div>
+
+          <h1
+            className="animate-enter max-w-3xl font-heading text-3xl font-semibold tracking-tight text-balance sm:text-6xl"
+            style={{ "--enter-delay": "180ms" } as React.CSSProperties}
+          >
             Share Zoom cloud recordings through secure, temporary links
           </h1>
-          <p className="mt-6 max-w-2xl text-base text-muted-foreground text-pretty sm:text-lg">
+
+          <p
+            className="animate-enter mt-6 max-w-2xl text-base text-muted-foreground text-pretty sm:text-lg"
+            style={{ "--enter-delay": "280ms" } as React.CSSProperties}
+          >
             ZoomVault is a lightweight web portal that uses Zoom for video storage and playback
             while adding recording metadata, attendee access tracking, expiring share links, and
             automated email notifications.
           </p>
-          <div className="mt-8 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
+
+          <div
+            className="animate-enter mt-8 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center"
+            style={{ "--enter-delay": "380ms" } as React.CSSProperties}
+          >
             <Button size="lg" asChild>
               <Link href="/admin">
                 Open admin portal
@@ -121,7 +138,10 @@ export default function Home() {
       </section>
 
       <section id="features" className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 sm:pb-24">
-        <div className="mb-8 max-w-2xl sm:mb-10">
+        <div
+          className="animate-enter mb-8 max-w-2xl sm:mb-10"
+          style={{ "--enter-delay": "520ms" } as React.CSSProperties}
+        >
           <h2 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
             Everything you need to share recordings safely
           </h2>
@@ -131,8 +151,14 @@ export default function Home() {
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map(({ icon: Icon, title, description }) => (
-            <Card key={title} className="h-full">
+          {features.map(({ icon: Icon, title, description }, index) => (
+            <Card
+              key={title}
+              className="animate-enter h-full"
+              style={
+                { "--enter-delay": `${620 + index * 75}ms` } as React.CSSProperties
+              }
+            >
               <CardHeader>
                 <span className="mb-2 flex size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
                   <Icon className="size-4.5" />
@@ -145,7 +171,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 sm:pb-24">
+      <section
+        className="animate-enter mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 sm:pb-24"
+        style={{ "--enter-delay": "1080ms" } as React.CSSProperties}
+      >
         <Card className="bg-muted/40">
           <CardContent className="flex flex-col items-start gap-6 py-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
