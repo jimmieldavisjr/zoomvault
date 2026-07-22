@@ -77,10 +77,10 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
               href="/admin"
               className="flex min-w-0 items-center gap-2 font-heading text-lg font-semibold"
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+              <span className="menu-logo-gradient flex size-8 shrink-0 items-center justify-center rounded-md text-white">
                 <Lock className="size-4" />
               </span>
-              <span className="truncate">ZoomVault Admin</span>
+              <span className="menu-logo-gradient-text truncate">ZoomVault Admin</span>
             </Link>
             <Button variant="ghost" size="sm" onClick={signOut}>
               <LogOut />

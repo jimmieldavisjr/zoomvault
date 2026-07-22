@@ -20,6 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { HomeIntro } from "@/components/home-intro";
 
 const features = [
   {
@@ -65,16 +66,17 @@ const stack = ["Next.js", "NestJS", "PostgreSQL", "TypeScript"];
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col">
-      <header className="animate-header-enter sticky top-0 z-10 border-b bg-background/80 backdrop-blur-sm">
+      <HomeIntro />
+      <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-2 px-4 sm:px-6">
           <Link
             href="/"
             className="flex min-w-0 items-center gap-2 font-heading text-lg font-semibold"
           >
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <span className="menu-logo-gradient flex size-8 shrink-0 items-center justify-center rounded-md text-white">
               <Lock className="size-4" />
             </span>
-            <span className="truncate">ZoomVault</span>
+            <span className="menu-logo-gradient-text truncate">ZoomVault</span>
           </Link>
           <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
             <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
