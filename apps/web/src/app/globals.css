@@ -129,49 +129,152 @@
   }
 }
 
-/* Brand logo gradient: blue → light blue → violet → back to blue, looping. */
-@keyframes logo-gradient {
-  0% {
-    background-position: 0% 50%;
+@keyframes intro-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.7);
   }
   50% {
-    background-position: 100% 50%;
+    opacity: 0.9;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes intro-ring {
+  from {
+    opacity: 0.9;
+    transform: scale(0.1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
+
+@keyframes intro-brand {
+  0% {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.92);
+  }
+  35%,
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
   100% {
-    background-position: 0% 50%;
+    opacity: 0;
+    transform: translateY(-0.75rem) scale(1.04);
   }
 }
 
-.logo-gradient {
-  background-image: linear-gradient(
-    135deg,
-    oklch(0.55 0.22 262),
-    oklch(0.78 0.13 230),
-    oklch(0.62 0.21 295),
-    oklch(0.55 0.22 262)
-  );
-  background-size: 300% 300%;
-  animation: logo-gradient 6s ease-in-out infinite;
+@keyframes intro-dismiss {
+  0%,
+  82% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
-.logo-gradient-text {
-  background-image: linear-gradient(
-    90deg,
-    oklch(0.55 0.22 262),
-    oklch(0.78 0.13 230),
-    oklch(0.62 0.21 295),
-    oklch(0.55 0.22 262)
-  );
-  background-size: 300% 300%;
-  animation: logo-gradient 6s ease-in-out infinite;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.home-intro {
+  position: fixed;
+  z-index: 50;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  place-items: center;
+  overflow: hidden;
+  color: oklch(0.985 0 0);
+  background:
+    radial-gradient(circle at 50% 50%, oklch(0.36 0.14 258 / 0.7), transparent 34rem),
+    oklch(0.16 0.04 258);
+  animation: intro-dismiss 2.6s ease-in forwards;
+}
+
+.home-intro__glow {
+  position: absolute;
+  width: min(65vw, 42rem);
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  background: oklch(0.7 0.2 250 / 0.35);
+  filter: blur(3rem);
+  animation: intro-glow 1.8s ease-in-out infinite;
+}
+
+.home-intro__rings,
+.home-intro__brand {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.home-intro__rings {
+  width: 13rem;
+  aspect-ratio: 1;
+}
+
+.home-intro__rings span {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid oklch(0.9 0.08 250 / 0.65);
+  border-radius: 9999px;
+  animation: intro-ring 1.65s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+}
+
+.home-intro__rings span:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.home-intro__rings span:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.home-intro__brand {
+  position: absolute;
+  gap: 0.45rem;
+  text-align: center;
+  animation: intro-brand 2.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.home-intro__mark {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: 0.35rem;
+  place-items: center;
+  border: 1px solid oklch(0.9 0.08 250 / 0.75);
+  border-radius: 1rem;
+  background: oklch(0.95 0.04 250 / 0.16);
+  box-shadow: 0 0 2rem oklch(0.7 0.2 250 / 0.55);
+}
+
+.home-intro__mark svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.home-intro__brand p {
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+}
+
+.home-intro__brand span {
+  color: oklch(0.9 0.03 250);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .logo-gradient,
-  .logo-gradient-text {
-    animation: none;
+  .home-intro {
+    display: none;
   }
 }
