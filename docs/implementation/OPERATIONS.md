@@ -20,7 +20,17 @@ zoomvault/
   docs/    specs + this runbook
 ```
 
-Each app has its own `package.json` and `.env.example`.
+Each app has its own `package.json`, `pnpm-lock.yaml`, and `.env.example`. Each
+app is a standalone pnpm project (installed/deployed independently).
+
+### Prerequisites
+
+- **Node.js 22.13+** (pnpm 11 requires it).
+- **pnpm 11** via Corepack (pinned in each `package.json` `packageManager` field):
+  ```bash
+  corepack enable
+  corepack prepare pnpm@latest --activate   # or the version in packageManager
+  ```
 
 ---
 
@@ -31,16 +41,16 @@ Each app has its own `package.json` and `.env.example`.
    - For local DB, the easiest path is Docker:
      `docker run --name zoomvault-pg -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=zoomvault -p 5432:5432 -d postgres:16`
      then `DATABASE_URL="postgresql://postgres:postgres@localhost:5432/zoomvault?schema=public"`.
-2. **[TERMINAL]** Install deps: `npm install`.
-3. **[TERMINAL]** Apply schema to the DB: `npx prisma migrate dev --name init`.
+2. **[TERMINAL]** Install deps: `pnpm install`.
+3. **[TERMINAL]** Apply schema to the DB: `pnpm exec prisma migrate dev --name init`.
    (This is the step that actually creates the tables — it needs a live DB so it
    cannot run inside the Cursor sandbox.)
-4. **[TERMINAL]** Start: `npm run start:dev` → API on `http://localhost:4000`.
+4. **[TERMINAL]** Start: `pnpm run start:dev` → API on `http://localhost:4000`.
 
 ### Frontend (`apps/web`)
 1. **[TERMINAL]** `cp .env.example .env.local` and set
    `NEXT_PUBLIC_API_URL=http://localhost:4000`.
-2. **[TERMINAL]** `npm install` then `npm run dev` → web on `http://localhost:3000`.
+2. **[TERMINAL]** `pnpm install` then `pnpm dev` → web on `http://localhost:3000`.
 
 ---
 
@@ -52,16 +62,16 @@ Each app has its own `package.json` and `.env.example`.
 3. **[TERMINAL]** Run migrations against production once per schema change:
    ```bash
    # from apps/api, with DATABASE_URL pointing at the Railway DB
-   npx prisma migrate deploy
+   pnpm exec prisma migrate deploy
    ```
    - `migrate deploy` applies committed migrations (use in prod/CI).
    - `migrate dev` is for local development only (it can reset data).
 4. Whenever you edit `prisma/schema.prisma`:
-   **[TERMINAL]** `npx prisma generate` (regenerate client) then create a
-   migration with `npx prisma migrate dev --name <change>` and commit the
+   **[TERMINAL]** `pnpm exec prisma generate` (regenerate client) then create a
+   migration with `pnpm exec prisma migrate dev --name <change>` and commit the
    generated files in `prisma/migrations/`.
 
-> NOTE: `npx prisma generate` was already run once in this workspace so the typed
+> NOTE: `pnpm exec prisma generate` was already run once in this workspace so the typed
 > client compiles. It does **not** touch any database. Migrations do, so they are
 > left as a [TERMINAL] step for you.
 
@@ -71,8 +81,8 @@ Each app has its own `package.json` and `.env.example`.
 
 1. **[MANUAL]** Create a Railway service pointing at this repo, root `apps/api`.
 2. **[MANUAL]** Build/start commands:
-   - Build: `npm install && npm run build && npx prisma generate`
-   - Start: `npx prisma migrate deploy && npm run start:prod`
+   - Build: `corepack enable && pnpm install --frozen-lockfile && pnpm run build && pnpm exec prisma generate`
+   - Start: `pnpm exec prisma migrate deploy && pnpm run start:prod`
    (Running `migrate deploy` on start keeps prod schema current. Railway injects
    `PORT`; `main.ts` already reads it.)
 3. **[MANUAL]** Set service **Variables** (see `apps/api/.env.example`):
@@ -100,7 +110,9 @@ Each app has its own `package.json` and `.env.example`.
 
 1. **[MANUAL]** Import the repo into Vercel, root directory `apps/web`.
 2. **[MANUAL]** Set env var `NEXT_PUBLIC_API_URL=https://api.zoomvault.jdtechnologypartners.com`.
-3. **[MANUAL]** Deploy. Vercel auto-detects Next.js (build `next build`).
+3. **[MANUAL]** Deploy. Vercel auto-detects Next.js (build `next build`) and uses
+   pnpm automatically from the committed `pnpm-lock.yaml`. Ensure the project's
+   Node.js version is set to **22.x** (Project Settings → Node.js Version).
 
 ---
 

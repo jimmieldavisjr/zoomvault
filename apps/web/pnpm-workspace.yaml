@@ -1,0 +1,4 @@
+# Standalone pnpm project (deployed independently to Vercel).
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
