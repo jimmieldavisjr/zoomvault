@@ -1,0 +1,6 @@
+# Standalone pnpm project (deployed independently to Railway).
+allowBuilds:
+  '@prisma/client': true
+  '@prisma/engines': true
+  prisma: true
+  unrs-resolver: true

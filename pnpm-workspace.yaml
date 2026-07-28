@@ -1,2 +1,6 @@
 allowBuilds:
+<<<<<<< HEAD
   unrs-resolver: false
+=======
+  unrs-resolver: true
+>>>>>>> e64a2a2e045769e04701e17977a1c11f8fcd0662
