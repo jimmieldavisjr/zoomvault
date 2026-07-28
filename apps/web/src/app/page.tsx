@@ -21,43 +21,56 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { HomeIntro } from "@/components/home-intro";
+import { ParticleBackground } from "@/components/particle-background";
 
 const features = [
   {
     icon: Video,
     title: "Zoom-native storage",
     description:
-      "Recordings stay in Zoom for storage and playback — no duplicate files or extra infrastructure to manage.",
+      "Recordings stay in Zoom's cloud for storage, playback, and streaming. ZoomVault never downloads or duplicates video files, so you keep Zoom's reliability, transcoding, and bandwidth while avoiding extra infrastructure.",
   },
   {
     icon: Link2,
     title: "Expiring share links",
     description:
-      "Generate secure, temporary links that automatically expire so recordings are never exposed longer than needed.",
+      "Generate secure, time-bound links that automatically expire after a duration you choose. Every link is cryptographically signed and single-purpose, so recordings are never exposed longer than intended.",
   },
   {
     icon: Users,
     title: "Attendee access tracking",
     description:
-      "See exactly who opened a recording and when, with a clear audit trail for every shared link.",
+      "See exactly who opened a recording, when, from where, and for how long. A complete audit trail ties every view to an email address and timestamp, making compliance and security reviews straightforward.",
   },
   {
     icon: BarChart3,
     title: "Recording metadata",
     description:
-      "Surface titles, durations, dates, and host details so viewers always have the context they need.",
+      "Surface meeting titles, durations, dates, host details, participant counts, and file sizes alongside every recording. Viewers get full context without digging through email threads or calendar invites.",
   },
   {
     icon: Mail,
     title: "Automated notifications",
     description:
-      "Send share invitations and reminders automatically via email — no manual follow-up required.",
+      "Send branded share invitations, access reminders, and expiration warnings automatically via email. Reduce manual follow-up while ensuring recipients never miss important recordings.",
   },
   {
     icon: ShieldCheck,
     title: "Secure by default",
     description:
-      "Scoped, revocable links keep sensitive meetings protected without slowing down legitimate access.",
+      "Scoped, revocable tokens and role-based access keep sensitive meetings protected. Admins can disable links instantly while legitimate viewers enjoy frictionless, authenticated playback.",
+  },
+  {
+    icon: Clock,
+    title: "Custom retention windows",
+    description:
+      "Set per-recording lifetimes that match your compliance policies. When a link expires, access is cut off immediately and viewers are shown a clear, branded expiration message.",
+  },
+  {
+    icon: Lock,
+    title: "Optional password protection",
+    description:
+      "Add an extra layer of security by requiring a passphrase before playback. Combine passwords with expiring links for defense-in-depth sharing that still feels effortless to recipients.",
   },
 ];
 
@@ -66,6 +79,7 @@ const stack = ["Next.js", "NestJS", "PostgreSQL", "TypeScript"];
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col">
+      <ParticleBackground />
       <HomeIntro />
       <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-2 px-4 sm:px-6">
@@ -146,8 +160,9 @@ export default function Home() {
             Everything you need to share recordings safely
           </h2>
           <p className="mt-3 text-muted-foreground text-pretty">
-            Built around Zoom&apos;s cloud, ZoomVault adds the access controls and visibility that
-            teams expect from a modern sharing portal.
+            Built around Zoom&apos;s cloud, ZoomVault adds the access controls, audit visibility,
+            and automation that teams expect from a modern sharing portal — without moving a single
+            video file out of Zoom.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
